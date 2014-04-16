@@ -26,5 +26,5 @@ class SocketWatcher : public node::ObjectWrap
 
     void StartInternal();
     void StopInternal();
-    static void Callback(uv_poll_t *w, int status, int events);
+    static void CallbackInternal(uv_poll_t *w, int status, int events);
 };

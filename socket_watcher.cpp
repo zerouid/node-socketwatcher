@@ -12,7 +12,7 @@ using namespace v8;
 #else
 namespace node
 {
-  Handle<Value> MakeCallback(Isolate *isolate, const Handle<Object> object, const Handle<Function> callback, int argc, Handle<Value> argv[])
+  void MakeCallback(Isolate *isolate, const Handle<Object> object, const Handle<Function> callback, int argc, Handle<Value> argv[])
   { 
     HandleScope scope(isolate);
 
@@ -20,14 +20,11 @@ namespace node
 
     TryCatch try_catch;
 
-    Local<Value> ret = callback->Call(object, argc, argv);
+    callback->Call(object, argc, argv);
 
     if (try_catch.HasCaught()) {
       FatalException(try_catch);
-      return Undefined();
     }
-
-    return scope.Escape(ret);
   }
 }  // namespace node
 #endif
@@ -35,11 +32,6 @@ namespace node
 
 Persistent<String> callback_symbol;
 Persistent<Function> constructor;
-
-// mman, why is this here?
-// Handle<Value> Calleback(const Arguments& args) {
-//     return Undefined();
-// };
 
 SocketWatcher::SocketWatcher() : poll_(NULL), fd_(0), events_(0)
 {
@@ -86,11 +78,11 @@ void SocketWatcher::StartInternal()
   }
 
   if (!uv_is_active((uv_handle_t*)poll_)) {
-    uv_poll_start(poll_, events_, &SocketWatcher::Callback);
+    uv_poll_start(poll_, events_, &SocketWatcher::CallbackInternal);
   }
 }
 
-void SocketWatcher::Callback(uv_poll_t *w, int status, int revents)
+void SocketWatcher::CallbackInternal(uv_poll_t *w, int status, int revents)
 {
   Isolate* isolate = Isolate::GetCurrent();
   HandleScope scope(isolate);
