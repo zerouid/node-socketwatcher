@@ -1,9 +1,11 @@
 {
 	"name": "node-socketwatcher",
-	"version": "0.3.0",
-	"main": "./build/Release/socketwatcher.node",
-	"engines": {
-		"node": ">= 0.11.0"
-	},
-	"gypfile": true
+		"version": "0.3.0",
+		"main": "./build/Release/socketwatcher.node",
+		"engines": {
+			"node": ">= 0.11.0"
+		},
+		"scripts": {
+			"preinstall": "node-gyp clean || true; node-gyp configure build --nodedir=/usr/local/include/node"
+		}
 }
