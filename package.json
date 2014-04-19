@@ -6,6 +6,6 @@
 			"node": ">= 0.11.0"
 		},
 		"scripts": {
-			"preinstall": "node-gyp clean || true; node-gyp configure build --nodedir=/usr/local/include/node"
+			"preinstall": "node-gyp clean || true; node-gyp configure build --nodedir=/home/mman/install/include/node"
 		}
 }
